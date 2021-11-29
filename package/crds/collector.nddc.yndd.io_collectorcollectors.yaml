@@ -1,0 +1,219 @@
+
+
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: collectorcollectors.collector.nddc.yndd.io
+spec:
+  group: collector.nddc.yndd.io
+  names:
+    categories:
+    - ndd
+    - collector
+    kind: CollectorCollector
+    listKind: CollectorCollectorList
+    plural: collectorcollectors
+    singular: collectorcollector
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.kind=='TargetFound')].status
+      name: TARGET
+      type: string
+    - jsonPath: .status.conditions[?(@.kind=='Ready')].status
+      name: STATUS
+      type: string
+    - jsonPath: .status.conditions[?(@.kind=='Synced')].status
+      name: SYNC
+      type: string
+    - jsonPath: .status.conditions[?(@.kind=='InternalLeafrefValidationSuccess')].status
+      name: LOCALLEAFREF
+      type: string
+    - jsonPath: .status.conditions[?(@.kind=='ExternalLeafrefValidationSuccess')].status
+      name: EXTLEAFREF
+      type: string
+    - jsonPath: .status.conditions[?(@.kind=='ParentValidationSuccess')].status
+      name: PARENTDEP
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: CollectorCollector is the Schema for the Collector API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: A CollectorSpec defines the desired state of a Collector.
+            properties:
+              active:
+                default: true
+                description: Active specifies if the managed resource is active or
+                  not
+                type: boolean
+              deletionPolicy:
+                default: Delete
+                description: DeletionPolicy specifies what will happen to the underlying
+                  external when this managed resource is deleted - either "Delete"
+                  or "Orphan" the external resource.
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forNetworkNode:
+                description: CollectorParameters are the parameter fields of a Collector.
+                properties:
+                  collector:
+                    description: Collector struct
+                    properties:
+                      metric:
+                        items:
+                          description: CollectorMetric struct
+                          properties:
+                            admin-state:
+                              type: string
+                            description:
+                              type: string
+                            name:
+                              type: string
+                            paths:
+                              items:
+                                type: string
+                              maxItems: 16
+                              minItems: 0
+                              type: array
+                            prefix:
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type: array
+                    type: object
+                type: object
+              networkNodeRef:
+                default:
+                  name: default
+                description: NetworkNodeReference specifies which network node will
+                  be used to create, observe, update, and delete this managed resource
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forNetworkNode
+            type: object
+          status:
+            description: A CollectorStatus represents the observed state of a Collector.
+            properties:
+              atNetworkNode:
+                description: CollectorObservation are the observable fields of a Collector.
+                properties:
+                  collector:
+                    description: NddccollectorCollector struct
+                    properties:
+                      metric:
+                        items:
+                          description: NddccollectorCollectorMetric struct
+                          properties:
+                            admin-state:
+                              type: string
+                            description:
+                              type: string
+                            last-update:
+                              type: string
+                            name:
+                              type: string
+                            paths:
+                              items:
+                                type: string
+                              maxItems: 16
+                              minItems: 0
+                              type: array
+                            prefix:
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type: array
+                    type: object
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource
+                  properties:
+                    kind:
+                      description: Type of this condition. At most one of each condition
+                        type may apply to a resource at any point in time.
+                      type: string
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time this condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A Message containing details about this condition's
+                        last transition from one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                  required:
+                  - kind
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  type: object
+                type: array
+              externalLeafRefs:
+                description: ExternalLeafRefs tracks the external resources this resource
+                  is dependent upon
+                items:
+                  type: string
+                type: array
+              resourceIndexes:
+                additionalProperties:
+                  type: string
+                description: ResourceIndexes tracks the indexes that or used by the
+                  resource
+                type: object
+              target:
+                description: Target used by the resource
+                items:
+                  type: string
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

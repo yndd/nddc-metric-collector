@@ -1,0 +1,8 @@
+
+apiVersion: meta.pkg.ndd.yndd.io/v1
+kind: Intent
+metadata:
+  name: nddc-metric-collector
+spec:
+  controller:
+    image: yndd/nddc-metric-collector-controller:latest

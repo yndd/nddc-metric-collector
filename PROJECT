@@ -1,0 +1,5 @@
+version: "1"
+domain: nddc.yndd.io
+repository: github.com/yndd/nddc-metric-collector
+name: nddc-metric-collector
+resources: []
