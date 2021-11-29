@@ -46,7 +46,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	collectorv1alpha1 "github.com/yndd/nddc-metric-collector/apis/collector/v1alpha1"
-	"github.com/yndd/nddc-metric-collector/internal/target"
 )
 
 const (
@@ -279,7 +278,6 @@ func (v *validatorCollector) ValidateResourceIndexes(ctx context.Context, mg res
 // is called.
 type connectorCollector struct {
 	log         logging.Logger
-	tuChan      chan *target.Info
 	kube        client.Client
 	usage       resource.Tracker
 	rootSchema  *yentry.Entry
