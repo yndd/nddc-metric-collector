@@ -1,0 +1,8 @@
+apiVersion: pkg.ndd.yndd.io/v1
+kind: Intent
+metadata:
+  name: nddc-metric-collector
+  namespace: ndd-system
+spec:
+  package: yndd/nddc-metric-collector:latest
+  packagePullPolicy: Always

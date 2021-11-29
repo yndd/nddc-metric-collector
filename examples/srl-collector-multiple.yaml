@@ -1,0 +1,24 @@
+apiVersion: collector.nddc.yndd.io/v1alpha1
+kind: CollectorCollector
+metadata:
+  name: default-collector
+  namespace: default
+spec:
+  active: true
+  networkNodeRef:
+    name: dummy
+  forNetworkNode:
+    collector:
+      metric:
+      - name: interface
+        prefix: srl
+        description: interface-collector
+        admin-state: enable
+        paths:
+        - /interface[name=*]/statistics
+      - name: lldp
+        prefix: srl
+        description: lldp-collector
+        admin-state: enable
+        paths:
+        - /system/lldp/interface[name=*]/statistics
